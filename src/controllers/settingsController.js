@@ -14,13 +14,21 @@ const settingsController = {
 
     addSetting: async (req, res) => {
         try {
-            const newSetting = new Settings(req.body);
+            const { unit_ID } = req.body;
 
-            await newSetting.save();
+            // Check if the unit_ID exists, then update; otherwise, create a new one
+            const updatedSetting = await Settings.findOneAndUpdate(
+                { unit_ID }, // Query to find document by unit_ID
+                req.body, // Update the document with new data
+                { new: true, upsert: true } // Options: return the updated doc, and insert if not found
+            );
 
-            return res.status(201).json({ message: 'Setting added successfully' });
+            return res.status(200).json({
+                message: 'Setting added or updated successfully',
+                updatedSetting,
+            });
         } catch (error) {
-            console.error('Error adding setting:', error);
+            console.error('Error adding or updating setting:', error);
             return res.status(500).json({ error: 'Internal server error' });
         }
     },
@@ -37,7 +45,10 @@ const settingsController = {
                 return res.status(404).json({ error: 'Setting not found' });
             }
 
-            return res.status(200).json({ message: 'Setting updated successfully', updatedSetting });
+            return res.status(200).json({
+                message: 'Setting updated successfully',
+                updatedSetting,
+            });
         } catch (error) {
             console.error('Error updating setting:', error);
             return res.status(500).json({ error: 'Internal server error' });

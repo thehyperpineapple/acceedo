@@ -21,7 +21,7 @@ app.use(requestLogger);
 app.use('/api/v1/auth', userAuthRoutes);
 app.use('/api/v1', settingsRoutes);
 app.use('/api/v1', graphRoutes);
-app.use('/api/v1', externalServiceRoutes);
+app.use('/api/v1/external', externalServiceRoutes);
 app.use('/api/v1', reportRoutes);
 
 // Error Handling Middleware

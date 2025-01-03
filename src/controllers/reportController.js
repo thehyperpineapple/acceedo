@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const ReportController = {
     generateReport: async (req, res) => {
         try {

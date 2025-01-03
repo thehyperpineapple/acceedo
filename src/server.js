@@ -1,7 +1,9 @@
+const http = require('http'); // Import HTTP module to create a server
 const app = require('./app'); // Import the Express app
 const connectDB = require('./config/database'); // Database connection
 const logger = require('./config/logger'); // Logger
 const dotenv = require('dotenv');
+const externalServiceController = require('./controllers/externalServiceController'); // Import WebSocket handler
 
 // Load environment variables
 dotenv.config();
@@ -10,13 +12,19 @@ console.log('MONGO_URI:', process.env.MONGO_URI);
 // Load configurations
 const PORT = process.env.PORT || 3000;
 
+// Create an HTTP server
+const server = http.createServer(app);
+
+// Attach WebSocket handler to the HTTP server
+externalServiceController.websocketHandler(server);
+
 // Connect to the database and start the server
 (async () => {
     try {
         await connectDB();
         logger.info('Database connected successfully');
 
-        app.listen(PORT, () => {
+        server.listen(PORT, () => {
             logger.info(`Server is running on port ${PORT}`);
         });
     } catch (error) {
