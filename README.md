@@ -8,6 +8,19 @@ npm -i
 ```
 nodemon server.js
 ```
+
+## Environment Variables
+#### Create a `.env` file to hold the following environment variables
+```
+# Server Configuration
+PORT=
+
+# MongoDB Configuration
+MONGO_URI=
+
+# JWT Configuration
+JWT_SECRET=
+```
 ## Routes
 
 ### Description of Routes and Their Usage
