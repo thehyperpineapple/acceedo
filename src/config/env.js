@@ -1,4 +1,3 @@
-// config/env.js
 const dotenv = require('dotenv');
 
 const loadEnv = () => {

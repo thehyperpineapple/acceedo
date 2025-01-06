@@ -1,4 +1,3 @@
-// routes/settingsRoutes.js
 const express = require('express');
 const settingsController = require('../controllers/settingsController');
 

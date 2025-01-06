@@ -1,4 +1,3 @@
-// models/GraphData.js
 const mongoose = require('mongoose');
 
 const graphDataSchema = new mongoose.Schema({

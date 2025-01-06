@@ -1,4 +1,3 @@
-// config/settings.js
 module.exports = {
     jwtSecret: process.env.JWT_SECRET,
     tokenExpiry: '1h', // JWT Token expiration time

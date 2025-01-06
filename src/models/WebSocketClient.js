@@ -1,4 +1,3 @@
-// models/WebSocketClient.js
 const mongoose = require('mongoose');
 
 const webSocketClientSchema = new mongoose.Schema({

@@ -1,4 +1,3 @@
-// middleware/corsMiddleware.js
 const cors = require('cors');
 
 const corsOptions = {

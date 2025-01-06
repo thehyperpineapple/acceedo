@@ -1,4 +1,3 @@
-// routes/reportRoutes.js
 const express = require('express');
 const reportController = require('../controllers/reportController');
 
