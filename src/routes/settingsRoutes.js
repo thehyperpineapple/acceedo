@@ -4,9 +4,9 @@ const settingsController = require('../controllers/settingsController');
 
 const router = express.Router();
 
-router.get('/settings', settingsController.getSettings);
-router.post('/settings', settingsController.addSetting);
-router.put('/settings/:id', settingsController.updateSetting);
-router.delete('/settings/:id', settingsController.deleteSetting);
+router.get('/getSettings', settingsController.getSettings);
+router.post('/addSettings', settingsController.addSetting); 
+router.delete('/deleteSetting', settingsController.deleteSetting);
+
 
 module.exports = router;

@@ -9,6 +9,6 @@ const settingsSchema = new mongoose.Schema({
     temp_low: { type: Number, required: true },
     water_level_high: { type: Number, required: true },
     water_level_low: { type: Number, required: true },
-});
+}, { versionKey: false }); // Supress __v field in response
 
 module.exports = mongoose.model('Settings', settingsSchema);

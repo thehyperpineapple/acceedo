@@ -18,11 +18,11 @@ app.use(corsMiddleware);
 app.use(requestLogger);
 
 // Routes
-app.use('/api/v1/auth', userAuthRoutes);
-app.use('/api/v1', settingsRoutes);
-app.use('/api/v1', graphRoutes);
-app.use('/api/v1/external', externalServiceRoutes);
-app.use('/api/v1', reportRoutes);
+app.use('/auth', userAuthRoutes);
+app.use('/settings', settingsRoutes);
+app.use('/graph', graphRoutes);
+app.use('/external', externalServiceRoutes);
+app.use('/report', reportRoutes);
 
 // Error Handling Middleware
 app.use(errorHandler);
