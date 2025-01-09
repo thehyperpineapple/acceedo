@@ -1,0 +1,53 @@
+<div class="Header-content">
+    <h6>Add Server</h6>
+</div>
+
+<div class="content">
+    <form [formGroup]="userForm" (ngSubmit)="onFormSubmit()">
+        <mat-form-field appearance="outline" class="User_ID">
+            <mat-label>Server ID</mat-label>
+            <input matInput placeholder="Enter Server ID" formControlName="unit_ID">
+        </mat-form-field>
+
+        <div class="row">
+            <mat-form-field appearance="outline">
+                <mat-label>Humidity High</mat-label>
+                <input matInput placeholder="Enter Humidity High" formControlName="humidity_high">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Humidity Low</mat-label>
+                <input matInput placeholder="Enter Humidity Low" formControlName="humidity_low">
+            </mat-form-field>
+        </div>
+
+        <div class="row">
+            <mat-form-field appearance="outline">
+                <mat-label>Temperature High</mat-label>
+                <input matInput placeholder="Enter Temperature High" formControlName="temp_high"> <!-- Fixed control name -->
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Temperature Low</mat-label>
+                <input matInput placeholder="Enter Temperature Low" formControlName="temp_low"> <!-- Fixed control name -->
+            </mat-form-field>
+        </div>
+
+        <div class="row">
+            <mat-form-field appearance="outline">
+                <mat-label>Water Level High</mat-label>
+                <input matInput placeholder="Enter Water Level High" formControlName="water_level_high">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Water Level Low</mat-label>
+                <input matInput placeholder="Enter Water Level Low" formControlName="water_level_low">
+            </mat-form-field>
+        </div>
+
+        <div class="footer-content">
+            <button type="button" class="close-button" (click)="onCancel()">Close</button>
+            <button type="submit" class="save-button" [disabled]="userForm.invalid">{{data ? 'Update' : 'Save'}}</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,68 @@
+<section class="header1">
+  <div class="logo">
+    <i class="material-icons icon icon-0 menu" (click)="toggleSidebar()">menu</i>
+    
+    <h5 class="heading">
+      <span class="humidity" >Humidity</span>
+      <span class="monitor">monitor</span>
+    </h5>
+    
+    <div>
+      <button routerLink="/graph" class="navigate-btn">Dashboard</button>
+    </div>
+
+  </div>
+</section>
+  
+<section class="main">
+  
+
+  <section  class="main2">
+   
+    <div class="mainda">
+      
+      <!-- Use *ngFor once to iterate and render both the dashboard card and the chart -->
+     
+      <div *ngFor="let server of servers">
+        <!-- Dashboard Card -->
+        <div class="dashboard-card">
+          <div class="header">
+            <h3>Server {{ server.unit_ID }}</h3>
+            <div class="live-status">
+              {{ server.status || 'Live' }}
+              <span class="dot" [ngStyle]="{ 'background-color': server.status === 'Live' ? 'green' : 'red' }"></span>
+            </div>
+          </div>
+          <hr>
+          <div class="stats">
+            <div class="stat">
+              <p>Temperature</p>
+              <h2 [style.color]="'green'">{{ server.t || 0 }}</h2>
+            </div>
+            <div class="stat">
+              <p>Humidity</p>
+              <h2 [style.color]="'#e88388'">{{ server.h || 0 }}</h2>
+            </div>
+            <div class="stat">
+              <p>Water Level</p>
+              <h2 [style.color]="'#9fc3f1'">{{ server.w || 0 }}</h2>
+            </div>
+          </div>
+          <div class="power-status">
+            <div class="power">
+              <p>UPS Power</p>
+              <p class="status-green">{{ server.ups || 0 }}</p>
+            </div>
+            <div class="power">
+              <p>EB Power</p>
+              <p class="status-red">{{ server.eb || 0 }}</p>
+            </div>
+          </div>
+        </div>
+
+      
+      </div>
+    </div>
+  </section>
+</section>
+

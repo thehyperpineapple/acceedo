@@ -1,0 +1,84 @@
+/* Container for the form content */
+.content {
+    margin-top: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+/* Style for form fields */
+mat-form-field {
+    width: 180px; /* Set fixed width for form fields */
+    height: 70px;
+}
+
+/* Flexbox layout for rows */
+.row {
+    display: flex;
+    gap: 10px; /* Spacing between form fields */
+    justify-content: space-between; /* Optional: Distribute fields evenly */
+}
+
+/* Header styling */
+h6 {
+    margin-left: 30px;
+    margin-top: 15px;
+    margin-bottom: 0px;
+    font-weight: bold; /* Optional: make the header bold */
+    font-size: 1.25rem; /* Optional: set size */
+}
+
+/* Footer section for buttons */
+.footer-content {
+    display: flex;
+    justify-content: center; /* Center-align buttons */
+    gap: 20px; /* Spacing between buttons */
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* Close button styling */
+.close-button {
+    background-color: #cbd9f1; /* Primary color for Close */
+    color: black; /* Text color */
+    border: none; /* Remove border */
+    padding: 8px 16px; /* Padding for button */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 4px; /* Rounded corners */
+    font-size: 1rem; /* Optional: Font size for the button */
+    transition: background-color 0.3s ease; /* Smooth transition on hover */
+}
+
+/* Save button styling */
+.save-button {
+    background-color: #5073fb; /* Custom Save button color */
+    color: white; /* Text color */
+    border: none; /* Remove border */
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px; /* Rounded corners */
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effects for buttons */
+.close-button:hover,
+.save-button:hover {
+    opacity: 0.9; /* Slight opacity change on hover */
+}
+
+/* Optional: media query for responsive design */
+@media screen and (max-width: 600px) {
+    mat-form-field {
+        width: 100%; /* Make form fields full-width on small screens */
+    }
+
+    .row {
+        flex-direction: column; /* Stack fields vertically on smaller screens */
+        gap: 15px;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

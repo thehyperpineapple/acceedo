@@ -1,0 +1,30 @@
+<div class="container" id="container">
+    <div class="form-container sign-in-container">
+        <form [formGroup]="signInForm" (ngSubmit)="saveCustomer()">
+            <h1>Sign in</h1>
+            
+            <input placeholder="username" formControlName="username" required />
+            <input placeholder="password" type="password" formControlName="password" required />
+            
+            <a href="#">Forgot password?</a>
+            <button type="submit" [disabled]="signInForm.invalid">Sign In</button>
+            
+            <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+        </form>
+    </div>
+
+    <div class="overlay-container">
+        <div class="overlay">
+            <div class="overlay-panel overlay-left">
+                <h1>Welcome Back!</h1>
+                <p>To keep connected with us please login with your personal info</p>
+                <button class="ghost" id="signIn">Sign In</button>
+            </div>
+            <div class="overlay-panel overlay-right">
+                <h1>Humidity Monitor</h1>
+                <p>start your journey with us</p>
+                <button class="ghost" id="signUp">About me</button>
+            </div>
+        </div>
+    </div>
+</div>

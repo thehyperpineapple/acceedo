@@ -1,0 +1,309 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  position: relative;
+  width: 100%;
+}
+
+.header1 {
+  height: 60px;
+  width: 100%;
+  display: flex;
+  background-color: #EEEEEE;
+  align-items: center;
+  border-bottom: 2px solid #f1f1f1;
+}
+  
+.logo {
+  display: flex;
+  align-items: center;
+  width: 300px;
+  padding-left: 20px;
+}
+ .heading {
+  margin-left:20px;
+  margin-top: 10px;
+ }
+
+.logo span {
+  color: #5073fb;
+  padding: 2px;
+}
+
+
+/* Main Content Styles */
+.mainda{
+  margin-right: 600px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  margin-top: 30px;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 200px;
+  background-color: #EEEEEE;
+  padding: 33px 10px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 2px solid #f1f1f1;
+  transition: width 0.3s, transform 0.3s ease;
+}
+
+.sidebar.active {
+  width: 68px;
+  overflow: hidden;
+  transform: translateX(0);
+}
+
+.main-content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+ 
+  padding: 0 40px;
+  transition: width 0.3s ease, margin-left 0.3s ease;
+}
+
+
+
+
+/* Menu button styles */
+.icon-0 {
+  color: #5073fb;
+  cursor: pointer; /* Make it look clickable */
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+.sidebar--items a,
+.sidebar--bottom--items a {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  color: #000;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.sidebar--items span {
+  padding-right: 20px;
+}
+
+.sidebar--bottom--items span {
+  padding-right: 20px;
+}
+
+.sidebar--items a:hover,
+.sidebar--bottom--items a:hover {
+  background-color: #5073fb;
+  color: #fff;
+}
+
+#active--link {
+  background-color: #5073fb;
+  color: #fff;
+}
+
+.icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  padding-right: 0px;
+}
+
+.icon-1 {
+  color: #c5bc58;
+  width: 50px;
+}
+
+.icon-2 {
+  color: #a280e9;
+  width: 50px;
+}
+
+.icon-3 {
+  color: #85ade3;
+  width: 50px;
+}
+
+.icon-4 {
+  color: #e36ac8;
+  width: 50px;
+}
+
+.icon-5 {
+  color: #70d7a5;
+  width: 50px;
+}
+
+/* Dashboard Card Styles */
+.dashboard-card {
+  background-color: #ebebeb;
+  color: #110303;
+  width: 300px;
+  padding: 10px 0;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  grid-column: span 1; /* Card takes up 1 column */
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: none;
+  margin-bottom: 5px;
+}
+
+.dashboard-card hr {
+  margin: 5px 0px;
+}
+
+.header h3 {
+  font-size: 22px;
+  margin-bottom: 0;
+  margin-left: 15px;
+}
+
+.live-status {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+  margin-left: 5px;
+}
+
+/* Stats Section */
+.stats {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat p {
+  font-size: 12px;
+}
+
+.stat h2 {
+  font-size: 20px;
+}
+.humidity{
+  color: black;
+}
+.power-status {
+  display: flex;
+  justify-content: space-around;
+}
+
+.power p {
+  font-size: 12px;
+}
+
+.status-green {
+  color: green;
+}
+
+.status-red {
+  color: #e88388;
+}
+
+.stat p {
+  margin-bottom: 0px;
+}
+
+/* Style for New Rows Dynamically Loaded */
+.dynamic-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-top: 1px solid #ddd;
+}
+
+.dynamic-row p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.dynamic-row .status {
+  font-size: 16px;
+  color: #4CAF50;
+}
+
+.dynamic-row .error-status {
+  color: #e88388;
+}
+
+/* Grid layout for card and graph in one row */
+.mainda {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 2 equal-width columns: 1 for card, 1 for graph */
+  gap: 60px; /* Space between the card and the graph */
+  padding: 20px;
+  justify-items: center; /* Center items horizontally */
+}
+
+.main-content {
+  margin-top: 40px;
+}
+
+.main2 {
+  margin-left: 30px;
+}
+canvas {
+ 
+  width: 300px !important; /* Set specific width for the graph */
+  height: 350px !important; /* Increase the height of the graph */
+  grid-column: span 1; /* Graph takes up 1 column */
+ 
+}
+.navigate-btn {
+  background-color: #5073fb;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 4px;
+  margin-left: 900px;
+}
+
+.navigate-btn:hover {
+  background-color: #4062c8;
+}

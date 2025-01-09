@@ -1,0 +1,494 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #eeeeee;
+}
+
+body {
+  position: relative;
+  width: 100%;
+}
+
+.header1 {
+  position: fixed; /* Fix the header at the top */
+  top: 0; /* Align to the top */
+  left: 0; /* Align to the left */
+  height: 60px;
+  width: 100%;
+  display: flex;
+  background-color: #EEEEEE;
+  align-items: center;
+  border-bottom: 2px solid #f1f1f1;
+  z-index: 1000; /* Ensure it stays above other content */
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  width: 300px;
+  padding-left: 20px;
+}
+
+.heading {
+  margin-left: 20px;
+  margin-top: 10px;
+}
+
+.logo span {
+  color: #5073fb;
+  padding: 2px;
+}
+
+.icon-0 {
+  color: #5073fb;
+  cursor: pointer; /* Make it look clickable */
+}
+
+.mainda {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 equal-width columns */
+  gap: 25px; /* Space between the cards */
+  justify-items: center; /* Center the cards horizontally */
+  margin-top: 20px;
+}
+
+
+.main {
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 60px);
+  margin-top: 60px; 
+  padding-top: 10px;/* Add margin to avoid overlapping with the fixed header */
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  margin-top: 30px;
+}
+
+.main-content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: calc(100% - 200px);
+  padding: 0 40px;
+  transition: width 0.3s ease, margin-left 0.3s ease;
+}
+
+.main-content.active {
+  margin-left: 68px;
+  width: calc(100% - 68px);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: none;
+  margin-bottom: 5px;
+}
+
+.header h3 {
+  font-size: 22px;
+  margin-bottom: 0;
+  margin-left: 15px;
+}
+
+.main-content {
+  margin-top: 40px;
+  width: 100%;
+}
+
+.navigate-btn {
+  background-color: #5073fb;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 4px;
+  height: 40px;
+  width: 200px;
+}
+
+.dashboard-but {
+  margin-left: 67%;
+}
+
+.date {
+  display: inline-block;
+  align-items: center;
+  margin: 20px 0; /* Add some space around the element */
+}
+
+.date label {
+  margin-right: 10px; /* Add space between the label and input */
+  font-size: 16px; /* Adjust label font size */
+  color: #333; /* Label text color */
+}
+
+.date input {
+  padding: 8px 12px; /* Add padding for better appearance */
+  font-size: 16px; /* Adjust input font size */
+  border: 1px solid #ccc; /* Border around the input */
+  border-radius: 4px; /* Slight rounding of input corners */
+  background-color: #f9f9f9; /* Light background color */
+  outline: none; /* Remove default input outline */
+  transition: border-color 0.3s ease; /* Smooth border transition */
+}
+
+.date input:focus {
+  border-color: #5073fb; /* Highlight border on focus */
+}
+
+.navigate-btn:hover {
+  background-color: #4062c8;
+}
+
+/* New Control Container Styles for Date and Dashboard Button */
+.control-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.date, .navigate-btn {
+  width: 48%; /* Make both date and button take equal space */
+}
+
+.date input {
+  width: 25%; /* Make input fill its container */
+}
+
+.navigate-btn {
+  width: 100%; /* Make button fill its container */
+}
+
+.chart-container {
+  width: 100%; 
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two charts per row */
+  gap: 25px; /* Space between the chart boxes */
+  padding: 0 20px; /* Add padding for spacing within the container */
+}
+
+.chart-box {
+  width: 100%; /* Ensure the chart box takes full width */
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 10px; /* Add a bit of inner padding */
+  transition: transform 0.2s;
+  outline: 0px solid black;
+}
+
+google-chart {
+  width: 100%; /* Ensure the chart takes full width */
+  height: 350px; /* Adjust the height */
+}
+
+.chart-title {
+  text-align: center; /* Center-align the title */
+  font-size: 16px; /* Adjust title size if needed */
+  font-weight: bold; /* Make it bold for visibility */
+  padding-bottom: 5px; /* Add some space before the underline */
+  display: inline-block;
+}
+
+.chart-separator {
+  border: none; /* Remove default border */
+  border-top: 1px solid rgb(95, 95, 95); /* Set the custom thickness and color */
+  margin-top: 5px;
+  margin-bottom: 15px; /* Adjust the spacing between the line and the chart */
+  width: 100%; /* Make it span the entire width */
+}
+
+.Line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: white;
+}
+.col{
+  background-color: white;
+ 
+}
+.hh{
+  border-width: 0.3px;
+  border-radius: 4px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  width: 100px;
+  height: 20px;
+}
+.live-indicator {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: green;
+  border-radius: 50%;
+  margin-left: 5px; /* Space between "Live" and the circle */
+}
+
+
+
+
+
+.sidebar.open {
+  left: 0; /* Show the sidebar */
+}
+
+.sidebar h3 {
+  padding: 15px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}                     
+.dow{
+  background-color: white;
+  margin-left: 415px;
+}
+.dow {
+  cursor: pointer; /* Change cursor to pointer */
+  transition: transform 0.2s ease; /* Smooth transition for scaling */
+}
+
+.dow:hover {
+  transform: scale(1.2); /* Scale up the icon on hover */
+  color: #007BFF; /* Change color on hover */
+}
+
+/* Existing styles... */
+
+
+.sidebar ul li {
+  padding: 5px 10px;
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  color: #333; /* Link color */
+}
+
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Dark background with transparency */
+  display: none; /* Hidden by default */
+  z-index: 999; /* Above other content */
+}
+
+.overlay.show {
+  display: block; /* Show when sidebar is open */
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -200px; /* Hidden by default */
+  width: 180px; /* Width of the sidebar */
+  height: 100%; /* Full height */
+  background-color: #ffffff; /* Bright background for sidebar */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  transition: left 0.3s ease; /* Smooth transition */
+  z-index: 1000; /* Above overlay */
+  margin-top: 60px;
+}
+
+.sidebar.open {
+  left: 0; /* Show the sidebar */
+}
+.active{
+  margin-top: 30px
+}
+
+
+/* Sidebar Item Styles */
+.sidebar--items,
+.sidebar--bottom--items {
+  padding: 0;
+  margin: 0;
+  list-style: none; /* Remove default list styling */
+  
+}
+
+.sidebar--items li,
+.sidebar--bottom--items li {
+  margin-bottom: 10px; /* Space between items */
+}
+
+
+
+.sidebar--items span,
+.sidebar--bottom--items span {
+  padding-right: 10px; /* Space between icon and text */
+}
+
+
+
+
+
+/* Icon Styles */
+.icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem; /* Icon size */
+}
+
+
+/* Adjust the input field height */
+.mat-form-field {
+  height: 40px; /* Set your desired height */
+}
+
+/* Adjust the calendar height */
+.mat-calendar {
+  max-height: 200px; /* Set maximum height for the calendar */
+  overflow-y: auto;  /* Enable scrolling if needed */
+}
+
+/* Adjust the calendar body height */
+.mat-calendar-body {
+  height: auto; /* Reset height if needed */
+}
+/* Remove background color from the mat-form-field */
+.mat-form-field {
+  background-color: transparent !important; /* Make the background transparent */
+}
+
+/* Remove background color from the input field */
+.mat-form-field input {
+  background-color: transparent !important; /* Make the input background transparent */
+}
+
+/* If there's a specific class applied, you can target it as well */
+.cal {
+  background-color: transparent !important; /* Apply to your specific form field */
+}
+
+/* Optional: If you want to remove any borders as well */
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: transparent !important; /* Make the field's fill background transparent */
+}
+
+/* General hover styles for sidebar items */
+/* General sidebar item styles */
+
+.sidebar--items li a,
+.sidebar--bottom--items li a {
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  color: #333; /* Default text color */
+  padding: 12px;
+  border-radius: 10px; /* Rounded corners */
+  text-decoration: none; /* Remove underline */
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover */
+}
+.sidebar--items li,
+.sidebar--bottom--items li {
+  margin: 0; /* Remove margin */
+  padding: 0; /* Remove padding */
+}
+
+
+         
+
+
+.icon-1 { color: #c5bc58;  }
+.icon-2 { color: #a280e9; }
+.icon-3 { color: #85ade3; }
+.icon-4 { color: #e36ac8; }
+.icon-5 { color: #70d7a5; }
+.sidebar--items span,
+.sidebar--bottom--items span {
+  padding-right: 5px; 
+}
+
+.sidebar--items li,
+.sidebar--bottom--items li {
+  margin-bottom: 0px;
+  /* Increase space between items */
+}
+
+
+.dashboard-but .navigate-btn {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.navigate-btn mat-icon {
+  font-size: 24px; /* Adjust icon size */
+  color: #000; /* Set the icon color */
+}
+
+
+
+.sidebar--items li a.active {
+  border-bottom: 2px solid black; /* Example style */
+  
+}
+
+
+.sidebar--items li a:hover,
+.sidebar--bottom--items li a:hover {
+  border: 2px solid black; /* Example style */
+}
+
+
+.log{
+  margin-top: 230px;
+  margin-bottom: 130px;
+
+}
+
+
+.download-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  z-index: 1000;
+  width: 300px;
+  text-align: center;
+}
+
+.popup-content h3 {
+  margin: 0;
+  font-size: 1.5em;
+  color: #333;
+}
+
+.popup-content p {
+  font-size: 1em;
+  margin: 15px 0;
+}
+
+.popup-content button {
+  margin: 10px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+

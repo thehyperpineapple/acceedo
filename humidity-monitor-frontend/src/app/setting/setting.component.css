@@ -1,0 +1,297 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    position: relative;
+    width: 100%;
+  } 
+  .header1 {
+    height: 60px;
+    width: 100%;
+    display: flex;
+    background-color: #EEEEEE;
+    align-items: center;
+    border-bottom: 2px solid #f1f1f1;
+  }
+  
+
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    width: 300px;
+    padding-left: 20px;
+  }
+   .heading {
+    margin-left:20px;
+    margin-top: 10px;
+   }
+  
+  .logo span {
+    color: #5073fb;
+    padding: 2px;
+  }
+  
+ 
+  .title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    margin-top: 30px;
+  }
+  
+  .main2 {
+    margin-left: 200px;
+  }  
+
+
+
+/* Menu button styles */
+.icon-0 {
+  color: #5073fb;
+  cursor: pointer; /* Make it look clickable */
+}
+
+  li {
+    list-style: none;
+  }
+  
+  a {
+    text-decoration: none;
+  }
+   
+  .icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.7rem;
+    padding-right: 0px;
+  }
+  .icon-1 {
+    color: #c5bc58;
+    width: 50px;
+  }
+  
+  .icon-2 {
+    color: #a280e9;
+    width: 50px;
+   
+  }
+  
+  .icon-3 {
+    color: #85ade3;
+    width: 50px;
+   
+  }
+  
+  .icon-4 {
+    color: #e36ac8;
+    width: 50px;
+    
+  }
+  
+  .icon-5 {
+    color: #70d7a5;
+    width: 50px;
+ 
+  }
+
+.logo h2 {
+    width: 196px;
+}
+
+.logo span {
+    color: #5073fb;
+}
+
+
+.add-user-btn {
+    background-color: #5073fb;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-left: 88%;
+    margin-top: 20px;
+}
+
+.add-user-btn:hover {
+    background-color: #4b67d2;
+    transform: translateY(-2px);
+}
+
+.add-user-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(80, 115, 251, 0.5);
+}
+.main-content{
+  margin: 40px;
+}
+
+.sidebar--bottom--items li:last-child a {
+    margin-bottom: 0;
+}
+
+.mat-elevation-z8 td {
+    text-align: center;
+}
+
+.filter {
+    width: 100%;
+    margin-top: 20px; 
+}
+
+/* Action buttons styling */
+.action-buttons {
+    display: flex;
+    justify-content: space-between; /* Space between the buttons */
+    width: 100%; /* Ensure it takes full width of the cell */
+}
+
+.action-buttons button {
+    flex: 1; /* Make buttons equal width */
+    margin: 0 5px; /* Optional: Add space between buttons */
+}
+
+.action-buttons button:first-child {
+    margin-left: 0; /* Remove left margin for the first button */
+}
+
+.action-buttons button:last-child {
+    margin-right: 0; /* Remove right margin for the last button */
+}
+th{
+    text-align: center;
+}
+
+.S_no{
+    text-align: center;
+} 
+td{
+    text-align: center;
+}
+
+
+/* Sidebar Styles */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -200px; /* Hidden by default */
+  width: 180px; /* Width of the sidebar */
+  height: 100%; /* Full height */
+  background-color: #ffffff; /* Bright background for sidebar */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  transition: left 0.3s ease; /* Smooth transition */
+  z-index: 1000; /* Above overlay */
+  margin-top: 60px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 30px;
+}
+
+.sidebar.open {
+  left: 0; /* Show the sidebar */
+}
+
+/* Sidebar Item Styles */
+.sidebar--items,
+.sidebar--bottom--items {
+  padding: 0;
+  margin: 0;
+  list-style: none; /* Remove default list styling */
+}
+
+.sidebar--items li,
+.sidebar--bottom--items li {
+  margin-bottom: 10px; /* Space between items */
+}
+
+.sidebar--items a,
+.sidebar--bottom--items a {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  color: #000;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.sidebar--items span,
+.sidebar--bottom--items span {
+  padding-right: 10px; /* Space between icon and text */
+}
+
+.sidebar--bottom--items span {
+  padding-right: 20px;
+  
+}
+
+/* Menu button styles */
+.icon-0 {
+  color: #5073fb;
+  cursor: pointer; /* Make it look clickable */
+}
+
+.icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  padding-right: 0px;
+}
+
+/* Icon colors for sidebar items */
+.icon-1 { color: #c5bc58; }
+.icon-2 { color: #a280e9; }
+.icon-3 { color: #85ade3; }
+.icon-4 { color: #e36ac8; }
+.icon-5 { color: #70d7a5; }
+
+.header-no-shadow {
+  box-shadow: none; /* No shadow effect */
+}
+.overlay {
+  position: fixed;
+  top: 60PX;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Dark background with transparency */
+  display: none; /* Hidden by default */
+  z-index: 999; /* Above other content */
+}
+
+.overlay.show {
+  display: block; /* Show when sidebar is open */
+}
+
+.sidebar--items li a.active {
+  border-bottom: 2px solid black; /* Example style */
+  
+}
+
+
+.sidebar--items li a:hover,
+li a:hover {
+  border: 2px solid black; /* Example style */
+}
+
+
+.log{
+  margin-top: 250px;
+}

@@ -1,0 +1,51 @@
+<div class="Header-content">
+    <h6>Add User</h6>
+</div>
+
+<div class="content">
+    <form [formGroup]="userForm" (ngSubmit)="onFormSubmit()">
+        
+
+        <div class="row">
+            <mat-form-field appearance="outline" class="user_ID">
+                <mat-label>User_ID</mat-label>
+                <input matInput placeholder="Enter user ID" formControlName="user_ID">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Username</mat-label>
+                <input matInput placeholder="Enter user name" formControlName="username">
+            </mat-form-field>
+
+           
+        </div>
+
+        <div class="row">
+        
+            <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="Enter email" type="email" formControlName="emailId">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Role</mat-label>
+                <input matInput placeholder="Enter role" formControlName="role">
+            </mat-form-field>
+        </div>
+
+        <div class="row">
+            <mat-form-field appearance="outline">
+                <mat-label>Phone No</mat-label>
+                <input matInput placeholder="Enter phone number" type="tel" formControlName="phoneNo">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Password</mat-label>
+                <input matInput placeholder="Enter password" type="password" formControlName="password">
+            </mat-form-field>
+        </div>
+
+        <div class="footer-content" >
+            <button type="button" class="close-button" (click)="onCancel()">Close</button>
+            <button type="submit" class="save-button" [disabled]="userForm.invalid">{{data ? 'Update' : 'Save'}}</button>
+          </div>                  
+    </form>
+</div>

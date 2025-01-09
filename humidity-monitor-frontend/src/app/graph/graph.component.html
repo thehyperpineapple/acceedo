@@ -1,0 +1,116 @@
+<section class="header1">
+  <div class="logo">
+    <i (click)="toggleSidebar()" class="material-icons icon icon-0 menu">menu</i>
+    <h5 class="heading">Humidity <span>monitor</span></h5>
+  </div>
+  <div class="dashboard-but">
+    <button routerLink="/dashboard" class="navigate-btn">more details</button>
+  </div>
+</section>
+
+<div class="sidebar" [class.open]="isSidebarOpen">
+  <div>
+    <ul class="sidebar--items">
+      <li>
+        <a routerLink="/dashboard" class="active">
+          <span class="icon icon-1">
+            <mat-icon>dashboard</mat-icon>
+          </span>
+          <span class="sidebar-item">Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/user">
+          <span class="icon icon-2">
+            <mat-icon>person</mat-icon>
+          </span>
+          <span class="sidebar-item">User</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/setting">
+          <span class="icon icon-3">
+            <mat-icon>settings</mat-icon>
+          </span>
+          <span class="sidebar-item">Settings</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/report">
+          <span class="icon icon-4">
+            <mat-icon>assignment</mat-icon>
+          </span>
+          <span class="sidebar-item">Report</span>
+        </a>
+      </li>
+    </ul>
+    
+    <ul class="sidebar--bottom--items">
+      <li>
+        <a routerLink="/sign-in" class="log">
+          <span class="icon icon-5">
+            <mat-icon>logout</mat-icon>
+          </span>
+          <span class="sidebar-item">Logout</span>
+        </a>
+      </li>
+    </ul>
+    
+  </div>
+</div>
+
+<!-- Overlay -->
+<div class="overlay" [class.show]="isSidebarOpen" (click)="toggleSidebar()"></div>
+
+<section class="main">
+  <section class="main2">
+    <div class="mainda">
+      <div *ngIf="charts.length > 0" class="chart-container">
+        <div *ngFor="let chart of charts" class="chart-box">
+          <div class="Line">
+            <div class="col">Unit ID: {{ chart.unit_ID }}</div>
+            <mat-icon class="dow" (click)="openDownloadPopup(chart.unit_ID)">print</mat-icon>
+            <label for="dateInput{{ chart.unit_ID }}"></label>
+            <input class="col hh" 
+              id="dateInput{{ chart.unit_ID }}"
+              type="date"
+              (change)="onDateChange($event, chart.unit_ID)"
+              [value]="selectedDates[chart.unit_ID] | date: 'yyyy-MM-dd'"
+            />
+          </div>
+          <hr class="chart-separator">
+          <div class="Line">
+            <div class="col">
+              Temperature: 
+              <span style="color: #d95f02;" class="col">
+                {{ chart.lineChart.dataTable[chart.lineChart.dataTable.length - 1][2] }} °C
+              </span>
+            </div>
+            <div class="col">
+              Humidity: 
+              <span style="color: #1b9e77;" class="col">
+                {{ chart.lineChart.dataTable[chart.lineChart.dataTable.length - 1][1] }} %
+              </span>
+            </div>
+            <div class="col">Live <span class="live-indicator"></span></div>
+          </div>
+          <hr class="chart-separator">
+          <google-chart [data]="chart.lineChart"></google-chart>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>
+
+<!-- Download Popup -->
+<div *ngIf="isDownloadPopupOpen" class="download-popup">
+  <div class="popup-content">
+    <h3>Download Report</h3>
+    <p>Select the format to download:</p>
+    <button (click)="selectedUnitID !== null ? onPrintClick(selectedUnitID, 'excel') : null">Download as Excel</button>
+    <button (click)="selectedUnitID !== null ? onPrintClick(selectedUnitID, 'pdf') : null">Download as PDF</button>
+    <button (click)="closeDownloadPopup()">Cancel</button>
+  </div>
+</div>
+
+
