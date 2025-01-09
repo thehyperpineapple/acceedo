@@ -26,6 +26,8 @@ externalServiceController.websocketHandler(server);
 
         server.listen(PORT, () => {
             logger.info(`Server is running on port ${PORT}`);
+            // log the link 
+            console.log(`http://localhost:${PORT}`);
         });
     } catch (error) {
         logger.error('Failed to start the server:', error);
