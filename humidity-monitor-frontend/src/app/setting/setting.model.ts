@@ -11,6 +11,6 @@ export interface Server {
   }
   
   export interface ServerResponse {
-    servers: Server[]; // This represents the array of servers
+    settings: Server[]; // This represents the array of servers
   }
   

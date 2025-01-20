@@ -32,8 +32,8 @@ export class SettingComponent implements OnInit {
       next: (res: ServerResponse) => {
         console.log('Response from getUserList:', res);
         
-        if (res && res.servers && Array.isArray(res.servers)) {
-          this.dataSource.data = res.servers;
+        if (res && res.settings && Array.isArray(res.settings)) {
+          this.dataSource.data = res.settings;
         } else {
           console.error('Expected an array, but got:', res);
         }
@@ -46,6 +46,7 @@ export class SettingComponent implements OnInit {
       }
     });
   }
+  
 
   onPageChange(event: PageEvent) {
     this.pageEvent = event;
