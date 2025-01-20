@@ -31,4 +31,6 @@ router.put('/updateServer', async (req, res) => {
 // Delete a server
 router.delete('/deleteServer', externalServiceController.deleteServer);
 
+router.get('/getUnitCount', externalServiceController.getUnitCount);
+
 module.exports = router;

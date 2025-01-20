@@ -100,6 +100,31 @@ const externalServiceController = {
             return res.status(500).json({ error: 'Internal server error' });
         }
     },
+    getUnitCount: async (req, res) => {
+        try {
+            const collections = await mongoose.connection.db.listCollections().toArray();
+            
+            // Filter collections that match the naming pattern for units
+            const unitCollections = collections.filter(collection =>
+                collection.name.startsWith('Board_')
+            );
+    
+            // Extract unit IDs from collection names
+            const unitIDs = unitCollections.map(collection => {
+                const match = collection.name.match(/^Board_(\d+)$/);
+                return match ? parseInt(match[1], 10) : null; // Extract numeric unit_ID
+            }).filter(unitID => unitID !== null); // Filter out null values
+    
+            const unitCount = unitIDs.length;
+    
+            return res.status(200).json({
+                unitIDs,
+            });
+        } catch (error) {
+            console.error('Error fetching unit count and IDs:', error);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+    },
 
     websocketHandler: (wsServer) => {
         const WebSocket = require('ws');

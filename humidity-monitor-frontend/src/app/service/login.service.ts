@@ -9,7 +9,7 @@ import { environment } from '../environment/environment';
 export class LoginService {
   private apiUrl = environment.apiUrl;  // Base URL of the FastAPI server
   //use environment url
-  private loginUrl = `${this.apiUrl}auth/login`;  // FastAPI login endpoint
+  private loginUrl = `${this.apiUrl}/auth/login`;  // FastAPI login endpoint
   // private loginUrl = 'http://192.168.0.84:9001/auth/login';  // FastAPI login endpoint
 
   constructor(private http: HttpClient) { }
