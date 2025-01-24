@@ -1,0 +1,43 @@
+<div class="Header-content">
+    <h6>Generate Report</h6>
+</div>
+
+<div class="content">
+    <form [formGroup]="reportForm" (ngSubmit)="onFormSubmit()">
+        <mat-form-field appearance="outline" class="User_ID">
+            <!-- <input matInput placeholder="Enter Server ID" formControlName="unit_ID"> -->
+            <mat-label>Select a board</mat-label>
+            <mat-select formControlName="board">
+                <mat-option *ngFor="let id of boards" [value]="id">
+                  Board {{ id }}
+                </mat-option>
+              </mat-select>
+        </mat-form-field>
+
+        <div class="row">
+            <mat-form-field>
+                <input matInput [matDatepicker]="startPicker" placeholder="Start Date" formControlName="startDate"> 
+                <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                <mat-datepicker #startPicker></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field>
+                <input matInput [matDatepicker]="endPicker" placeholder="End Date" formControlName="endDate">
+                <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                <mat-datepicker #endPicker></mat-datepicker>
+              </mat-form-field>
+        </div>
+
+        <div class="row">
+            <mat-radio-group formControlName="format">
+              <mat-radio-button value="pdf">PDF</mat-radio-button>
+              <mat-radio-button value="csv">CSV</mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+        <div class="footer-content">
+            <button type="button" class="close-button" (click)="onCancel()">Close</button>
+            <button type="submit" class="save-button" [disabled]="reportForm.invalid">Download</button>        
+        </div>
+    </form>
+</div>
