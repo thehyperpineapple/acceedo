@@ -8,4 +8,4 @@ Consists of the following:
 ## To Do
 - [ ] Dashboard with livedata
 - [ ] Time selection in report
-- [ ] Configure settings schema to create based on available boards
+- [x] Configure settings schema to create based on available boards
