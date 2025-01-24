@@ -3,9 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserComponent} from './user/user.component';
-import {SettingComponent} from './setting/setting.component';
-import {ReportComponent} from './report/report.component';
-import {GraphComponent} from './graph/graph.component';
+import { SettingComponent } from './setting/setting.component';
+import { ReportComponent } from './report/report.component';
+import { GraphComponent } from './graph/graph.component';
 
 
 
@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },     // Dashboard route               // User route
   { path: 'user', component : UserComponent},
   {path: 'setting', component : SettingComponent},
-  {path: 'repor', component: ReportComponent},
+  {path: 'report', component: ReportComponent},
   {path: 'graph', component:GraphComponent}
 ];
 

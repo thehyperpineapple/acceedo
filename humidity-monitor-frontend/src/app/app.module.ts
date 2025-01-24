@@ -21,6 +21,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort'; 
+import { MatRadioModule } from '@angular/material/radio';
 
 // Google Charts
 import { Ng2GoogleChartsModule } from 'ng2-google-charts';
@@ -33,6 +34,7 @@ import { UserEditAddComponent } from './user/user-edit-add/user-edit-add.compone
 import { SettingComponent } from './setting/setting.component';
 import { SettingEditAddComponent } from './setting/setting-edit-add/setting-edit-add.component';
 import { ReportComponent } from './report/report.component';
+import { ReportOptionsComponent } from './report/report-options/report-options.component';
 import { GraphComponent } from './graph/graph.component';
 import {MatSelectModule} from '@angular/material/select';
 
@@ -49,6 +51,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     SettingComponent,
     SettingEditAddComponent,
     ReportComponent,
+    ReportOptionsComponent,
     GraphComponent
   ],
   imports: [
@@ -62,6 +65,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
+    MatRadioModule,
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
