@@ -4,6 +4,8 @@ import { GoogleChartInterface } from 'ng2-google-charts';
 import { DataService } from './datas.service';
 import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../environment/environment';
+
 
 @Component({
   selector: 'app-graph',
@@ -18,6 +20,7 @@ export class GraphComponent {
   isTodayGraph: boolean = true;
   isDownloadPopupOpen = false;
   selectedUnitID: number | null = null;
+  apiUrl = environment.apiUrl;
 
   constructor(
     private dataService: DataService,
@@ -34,11 +37,30 @@ export class GraphComponent {
   }
 
   initializeSelectedDates() {
-    const unitIDs = [1, 2, 3];
-    unitIDs.forEach(unit_ID => {
-      this.selectedDates[unit_ID] = new Date();
-    });
+    // Fetch unit IDs from the API
+    this.http
+      .get<{ message: string; unitCount: number; unitIDs: number[] }>(
+        `${this.apiUrl}/external/getUnitCount`
+      )
+      .subscribe(
+        (data) => {
+          const unitIDs = data.unitIDs;
+          const unit_ID = data.unitIDs;
+  
+          // Ensure unitIDs exist before processing
+          if (unitIDs && unitIDs.length > 0) {
+            unitIDs.forEach((unit_ID) => {
+              // console.log(unit_ID);
+              this.selectedDates[unit_ID] = new Date(); // Initialize selectedDates for each unit_ID
+            });
+          }
+        },
+        (error) => {
+          console.error('Error fetching unit IDs:', error);
+        }
+      );
   }
+  
 
   fetchHistoricalData(selectedDates: { [key: number]: Date }) {
     const unitIDs = Object.keys(selectedDates);
@@ -152,8 +174,16 @@ export class GraphComponent {
     }
   }
 
+  
   setupWebSocketConnections() {
-    const unitIDs = [1, 2, 3];
+    this.http
+      .get<{ message: string; unitCount: number; unitIDs: number[] }>(
+        `${this.apiUrl}/external/getUnitCount`
+      )
+      .subscribe(
+        (data) => {
+          const unitIDs = data.unitIDs;
+          // const unit_ID = data.unitIDs;
 
     unitIDs.forEach(unit_ID => {
       this.liveDataSubscriptions[unit_ID] = new Subject<any>();
@@ -169,6 +199,8 @@ export class GraphComponent {
         console.error(`Error fetching live data for unit ${unit_ID}:`, error);
       });
     });
+  }
+)
   }
 
   isSidebarOpen = false;

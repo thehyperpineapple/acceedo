@@ -293,7 +293,23 @@
   margin-right: 20px;
 }
 
-
+.download-data-btn {
+  background-color: #5073fb;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-left: 88%;
+  margin-top: 20px;
+}
 
 
 .sidebar--items li a.active {
