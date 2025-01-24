@@ -1,151 +1,152 @@
 <section class="header1 header-no-shadow">
-    <div class="logo">
-      <i class="material-icons icon icon-0 menu" (click)="toggleSidebar()">menu</i>
-      <h5 class="heading">Humidity <span>monitor</span></h5>
-    </div>
-  </section>
-
-
-
-  
-  <div class="sidebar" [class.open]="isSidebarOpen">
-    <div>
-      <ul class="sidebar--items">
-        <li>
-          <a routerLink="/graph">
-            <span class="icon icon-1">
-              <mat-icon>dashboard</mat-icon>
-            </span>
-            <span class="sidebar-item">Dashboard</span>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/user">
-            <span class="icon icon-2">
-              <mat-icon>person</mat-icon>
-            </span>
-            <span class="sidebar-item">User</span>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/setting">
-            <span class="icon icon-3">
-              <mat-icon>settings</mat-icon>
-            </span>
-            <span class="sidebar-item">Settings</span>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/report" class="active">
-            <span class="icon icon-4">
-              <mat-icon>assignment</mat-icon>
-            </span>
-            <span class="sidebar-item">Report</span>
-          </a>
-        </li>
-      </ul>
-      <ul class="sidebar--bottom--items">
-        <li>
-          <a routerLink="/sign-in" class="log">
-            <span class="icon icon-5">
-              <mat-icon>logout</mat-icon>
-            </span>
-            <span class="sidebar-item">Logout</span>
-          </a>
-        </li>
-      </ul>
-      
-    </div>
+  <div class="logo">
+    <i class="material-icons icon icon-0 menu" (click)="toggleSidebar()">menu</i>
+    <h5 class="heading">Humidity <span>Monitor</span></h5>
   </div>
+</section>
 
-  <!-- Overlay -->
+
+
+
+<div class="sidebar" [class.open]="isSidebarOpen">
+  <div>
+    <ul class="sidebar--items">
+      <li>
+        <a routerLink="/graph">
+          <span class="icon icon-1">
+            <mat-icon>dashboard</mat-icon>
+          </span>
+          <span class="sidebar-item">Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/user">
+          <span class="icon icon-2">
+            <mat-icon>person</mat-icon>
+          </span>
+          <span class="sidebar-item">User</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/setting">
+          <span class="icon icon-3">
+            <mat-icon>settings</mat-icon>
+          </span>
+          <span class="sidebar-item">Settings</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/report" class="active">
+          <span class="icon icon-4">
+            <mat-icon>assignment</mat-icon>
+          </span>
+          <span class="sidebar-item">Report</span>
+        </a>
+      </li>
+    </ul>
+    <ul class="sidebar--bottom--items">
+      <li>
+        <a routerLink="/sign-in" class="log">
+          <span class="icon icon-5">
+            <mat-icon>logout</mat-icon>
+          </span>
+          <span class="sidebar-item">Logout</span>
+        </a>
+      </li>
+    </ul>
+    
+  </div>
+</div>
+
+<!-- Overlay -->
 <div class="overlay" [class.show]="isSidebarOpen" (click)="toggleSidebar()"></div>
 
-  <section class="main">
-    <section [ngClass]="{ 'main-content': true, 'active': !isSidebarOpen }" class="main2">
-      <mat-card appearance="outlined">
-        <mat-card-content class="card">
-          <div class="cards cad"><mat-form-field>
-            <mat-label>Choose a date</mat-label>
-            <input matInput [matDatepicker]="picker">
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+<section class="main">
+  <section [ngClass]="{ 'main-content': true, 'active': !isSidebarOpen }" class="main2">
+    <mat-card appearance="outlined">
+      <mat-card-content class="card">
+        <div class="cards cad">
+          <mat-form-field>
+            <input matInput [matDatepicker]="picker" placeholder="Choose a date" (dateChange)="onDateChange($event)">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field></div>
-          <div class="cards">
-            <mat-form-field>
-              <mat-label>Select an Unit</mat-label>
-              <mat-select disableRipple>
-                <mat-option value="1"> 1</mat-option>
-                <mat-option value="2"> 2</mat-option>
-                <mat-option value="3"> 3</mat-option>
-              </mat-select>
-            </mat-form-field>
+        <div class="cards">
+          <mat-form-field>
+            <mat-label>Select a board</mat-label>
+            <mat-select disableRipple [(value)]="unitId" (selectionChange)="onBoardChange($event)">
+              <mat-option *ngFor="let id of boardIDs" [value]="id">
+                Board {{ id }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <!-- <button class="add-user-btn" (click)="openAddEdit()"> -->
             
-          </div>
-          <div class="cards cad" >
-            <mat-form-field>
-              <mat-label>Select a time</mat-label>
-              <mat-select disableRipple>
-                <mat-option value="1"> 15  mins</mat-option>
-                <mat-option value="2">30 mins</mat-option>
-                <mat-option value="3">45 mins</mat-option>
-                <mat-option value="3">60 mins</mat-option>
-              </mat-select>
-            </mat-form-field>
-            
-          </div>
+        </div>
+        <div class="cards cad" >
+          <mat-form-field>
+            <mat-label>Select a time</mat-label>
+            <mat-select disableRipple>
+              <mat-option value="1">15 mins</mat-option>
+              <mat-option value="2">30 mins</mat-option>
+              <mat-option value="3">45 mins</mat-option>
+              <mat-option value="3">60 mins</mat-option>
+            </mat-select>
+          </mat-form-field>
+          
+        </div>
 
-        </mat-card-content>
-      </mat-card>
-      <div class="mainda">
-     
-        <div class="table"><mat-form-field>
-          <mat-label>Filter</mat-label>
-          <input matInput (keyup)="applyFilter($event)" placeholder="Ex. 12:00 PM" #input>
-        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+    <div class="mainda">
+   
+      <div class="table"><mat-form-field>
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. 12:00 PM" #input>
+      </mat-form-field>
+      
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <!-- Time Column -->
+          <ng-container matColumnDef="time">
+            <th mat-header-cell *matHeaderCellDef> Time </th>
+            <td mat-cell *matCellDef="let element"> {{element.time}} </td>
+          </ng-container>
         
-        <div class="mat-elevation-z8">
-          <table mat-table [dataSource]="dataSource" matSort>
+          <!-- Temperature Column -->
+          <ng-container matColumnDef="temperature">
+            <th mat-header-cell *matHeaderCellDef> Temperature </th>
+            <td mat-cell *matCellDef="let element"> {{element.t}} °C </td>
+          </ng-container>
         
-            <!-- Time Column -->
-            <ng-container matColumnDef="time">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Time </th>
-              <td mat-cell *matCellDef="let row"> {{row.time}} </td>
-            </ng-container>
+          <!-- Humidity Column -->
+          <ng-container matColumnDef="humidity">
+            <th mat-header-cell *matHeaderCellDef> Humidity </th>
+            <td mat-cell *matCellDef="let element"> {{element.h}} % </td>
+          </ng-container>
         
-            <!-- Temperature Column -->
-            <ng-container matColumnDef="temperature">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Temperature </th>
-              <td mat-cell *matCellDef="let row"> {{row.temperature}} °C </td>
-            </ng-container>
-        
-            <!-- Humidity Column -->
-            <ng-container matColumnDef="humidity">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Humidity </th>
-              <td mat-cell *matCellDef="let row"> {{row.humidity}} % </td>
-            </ng-container>
-        
-            <!-- Header and Row Definitions -->
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        
-            <!-- Row shown when there is no matching data -->
-            <tr class="mat-row" *matNoDataRow>
-              <td class="mat-cell" colspan="3">No data matching the filter "{{input.value}}"</td>
-            </tr>
-          </table>
-        
-          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
-        </div>
-        </div>
-        <div class="table">
-          <h1></h1> <!-- Display the title -->
-          <div *ngIf="lineChart2">
-            <google-chart [data]="lineChart2"></google-chart> <!-- Binding lineChart2 data to the chart -->
-          </div>
-        </div>
-        
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+      </div>
       </div>
       
-    </section>
+      <div class="table">
+        <h1></h1> <!-- Display the title -->
+        <!-- <div *ngIf="lineChart2">
+          <google-chart [data]="lineChart2"></google-chart>
+
+        </div> -->
+        <div class="chart-container">
+          <canvas id="lineChart"></canvas>
+        </div>
+      </div>
+      
+    </div>
+    <div>
+      <button mat-button (click)="openReportOptions()">Open Report Options</button>
+    </div>
   </section>
+</section>
