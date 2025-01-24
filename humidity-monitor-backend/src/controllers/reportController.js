@@ -37,8 +37,12 @@ const ReportController = {
                 return generateCSV(data, res);
             } else if (format === 'pdf') {
                 return generatePDF(data, res);
+            } else if (format === null || format === undefined) {
+                // Return data as json if no parameters are present
+                return res.status(200).json({ data });
+                
             } else {
-                return res.status(400).json({ error: 'Invalid format. Please specify "csv" or "pdf" as the format.' });
+                return res.status(400).json({ error: 'Invalid request' });
             }
         } catch (error) {
             console.error('Error generating report:', error);
