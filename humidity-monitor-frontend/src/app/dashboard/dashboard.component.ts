@@ -17,6 +17,7 @@ import { Subscription } from 'rxjs';
 import { DashService } from './dash.service';
 import { SharreService } from '../summma/sharre.service';
 import { Chart, registerables } from 'chart.js';
+import { environment } from '../environment/environment';
 
 Chart.register(...registerables);
 
@@ -38,6 +39,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   Linecharts: { [unitID: number]: Chart } = {}; // Store multiple chart instances
   isSidebarOpen = true;
   private platformId: Object; // Declare platformId
+  private apiUrl = environment.apiUrl; // Assign server address
 
   constructor(
     private http: HttpClient,
@@ -78,7 +80,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     console.log('Attempting to connect to WebSocket...');
 
     this.socket$ = new WebSocketSubject({
-      url: 'ws://192.168.0.84:9001/ws',
+      url: `ws://${this.apiUrl}/ws`,
       openObserver: {
         next: () => {
           console.log('WebSocket connection opened.');
