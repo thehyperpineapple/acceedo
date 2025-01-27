@@ -1,206 +1,245 @@
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, PLATFORM_ID, OnInit, OnDestroy } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { GoogleChartInterface } from 'ng2-google-charts';
-import { DataService } from './datas.service';
-import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../environment/environment';
+import { Chart, registerables } from 'chart.js';
 
-
+Chart.register(...registerables);
+interface ChartDataset {
+  label: string;
+  data: number[];
+  borderColor: string;
+  fill: boolean;
+}
 @Component({
   selector: 'app-graph',
   templateUrl: './graph.component.html',
-  styleUrls: ['./graph.component.css']
+  styleUrls: ['./graph.component.css'],
 })
-export class GraphComponent {
-  charts: { unit_ID: number; lineChart: GoogleChartInterface }[] = [];
+export class GraphComponent implements OnInit, OnDestroy {
   isBrowser: boolean = false;
-  liveDataSubscriptions: { [key: number]: Subject<any> } = {};
-  selectedDates: { [key: number]: Date } = {};
-  isTodayGraph: boolean = true;
-  isDownloadPopupOpen = false;
-  selectedUnitID: number | null = null;
-  apiUrl = environment.apiUrl;
+  baseUrl = environment.apiUrl;
+  wsUrl = environment.wsUrl;
+
+  public boards: number[] = [];
+  private webSocketConnections: { [key: number]: WebSocket } = {};
+  public temperatureChart: Chart | null = null;
+  public humidityChart: Chart | null = null;
+  public powerChart: Chart | null = null;
+  public waterLevelChart: Chart | null = null;
+  public port: number = 8000;
 
   constructor(
-    private dataService: DataService,
     private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
+  }
 
+  ngOnInit() {
     if (this.isBrowser) {
-      this.initializeSelectedDates();
-      this.fetchHistoricalData(this.selectedDates);
-      this.setupWebSocketConnections();
+      this.fetchBoardIDs();
+      this.initializeCharts();
     }
   }
 
-  initializeSelectedDates() {
-    // Fetch unit IDs from the API
+  ngOnDestroy() {
+    // Clean up WebSocket connections
+    Object.values(this.webSocketConnections).forEach((ws) => ws.close());
+  }
+
+  private fetchBoardIDs(): void {
     this.http
-      .get<{ message: string; unitCount: number; unitIDs: number[] }>(
-        `${this.apiUrl}/external/getUnitCount`
-      )
+      .get<{ unitIDs: number[] }>(`${this.baseUrl}/external/getUnitCount`)
       .subscribe(
-        (data) => {
-          const unitIDs = data.unitIDs;
-          const unit_ID = data.unitIDs;
-  
-          // Ensure unitIDs exist before processing
-          if (unitIDs && unitIDs.length > 0) {
-            unitIDs.forEach((unit_ID) => {
-              // console.log(unit_ID);
-              this.selectedDates[unit_ID] = new Date(); // Initialize selectedDates for each unit_ID
-            });
+        (response) => {
+          this.boards = response.unitIDs;
+          if (this.boards && this.boards.length > 0) {
+            this.setupWebSocketConnections();
+          } else {
+            console.warn('No boards available for WebSocket connections.');
           }
         },
         (error) => {
-          console.error('Error fetching unit IDs:', error);
+          console.error('Error fetching board IDs:', error);
         }
       );
   }
-  
 
-  fetchHistoricalData(selectedDates: { [key: number]: Date }) {
-    const unitIDs = Object.keys(selectedDates);
+  private setupWebSocketConnections(): void {
+    this.boards.forEach((boardID) => {
+      const ws = new WebSocket(`${this.wsUrl}:${this.port + boardID}`);
+      this.webSocketConnections[boardID] = ws;
 
-    unitIDs.forEach(unit_ID => {
-      const selectedDate = selectedDates[Number(unit_ID)];
-      const startTime = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), 8, 30);
-      const endTime = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() + 1, 13, 59, 59);
+      ws.onmessage = (event) => {
+        // console.log(`Raw WebSocket message from Board ${boardID}:`, event.data);
+        const data = JSON.parse(event.data);
+        // console.log(`Data received from Board ${boardID}:`, data);
+        this.updateCharts(boardID, data);
+      };
 
-      this.dataService.getChartDataByUnitID(Number(unit_ID), startTime, endTime).subscribe(
-        (response) => {
-          const filteredData = this.processChartData(response.data, selectedDate);
-          this.setupChart(filteredData, Number(unit_ID));
-        },
-        (error: any) => {
-          console.error('Error fetching data:', error);
-        }
-      );
+      ws.onclose = () => {
+        console.log(`WebSocket connection for Board ${boardID} closed.`);
+      };
+
+      ws.onerror = (error) => {
+        console.error(`WebSocket error for Board ${boardID}:`, error);
+      };
     });
   }
 
-  onDateChange(event: any, unit_ID: number) {
-    const selectedDate = new Date(event.target.value);
-    this.selectedDates[unit_ID] = selectedDate;
-    this.fetchHistoricalData(this.selectedDates);
-    this.isTodayGraph = selectedDate.toDateString() === new Date().toDateString();
+  private initializeCharts(): void {
+    this.temperatureChart = this.createChart(
+      'temperatureCanvas',
+      'Temperature',
+      '°C'
+    );
+    this.humidityChart = this.createChart(
+      'humidityCanvas',
+      'Humidity',
+      '%'
+    );
+    this.powerChart = this.createChart(
+      'powerCanvas',
+      'Power',
+      'W'
+    );
+    this.waterLevelChart = this.createChart(
+      'waterLevelCanvas',
+      'Water Level',
+      'L'
+    );
   }
 
-  processChartData(data: any[], selectedDate: Date) {
-    return data
-      .map((item: any) => [
-        new Date(item[0]),
-        Number(item[1]),
-        Number(item[2])
-      ] as [Date, number, number])
-      .filter((dataPoint: [Date, number, number]) => {
-        const dataDate = dataPoint[0];
-        const startTime = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), 8, 30);
-        const endTime = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() + 1, 13, 59, 59);
-
-        return dataDate >= startTime && dataDate <= endTime;
-      });
-  }
-
-  setupChart(chartData: any[], unit_ID: number) {
-    const formattedData = [
-      ['Time', 'Humidity', 'Temperature'],
-      ...chartData.map(item => [
-        new Date(item[0]),
-        Number(item[1]),
-        Number(item[2])
-      ])
-    ];
-
-    const newChart: GoogleChartInterface = {
-      chartType: 'LineChart',
-      dataTable: formattedData,
+  private createChart(
+    canvasId: string,
+    label: string,
+    unit: string
+  ): Chart {
+    const ctx = document.getElementById(canvasId) as HTMLCanvasElement;
+    return new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [], // Time points
+        datasets: [],
+      },
       options: {
-        hAxis: { title: 'Time' },
-        vAxis: { title: 'Value', minValue: 0 },
-        legend: { position: 'top' },
-        colors: ['#1b9e77', '#d95f02'],
-        curveType: 'function',
-        height: 350,
-        width: 615,
-        chartArea: {
-          left: '10%',
-          right: '5%',
-          top: '10%',
-          bottom: '15%'
+        responsive: true,
+        plugins: {
+          legend: { display: true, position: 'top' },
+          tooltip: {
+            callbacks: {
+              label: (context) =>
+                `${context.dataset.label}: ${context.raw} ${unit}`,
+            },
+          },
         },
-        explorer: {
-          actions: ['dragToZoom', 'rightClickToReset'],
-          axis: 'horizontal',
-          keepInBounds: true,
-          maxZoomIn: 4.0
-        }
-      }
-    };
-
-    const existingChart = this.charts.find(c => c.unit_ID === unit_ID);
-    if (existingChart) {
-      existingChart.lineChart.dataTable = formattedData;
-      if (existingChart.lineChart.component) {
-        existingChart.lineChart.component.draw();
-      }
-    } else {
-      this.charts.push({ unit_ID, lineChart: newChart });
-    }
-  }
-
-  updateChartWithLiveData(liveData: any[], unit_ID: number) {
-    const now = new Date();
-    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 8, 30);
-    const endOfTomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 3, 29, 59);
-
-    if (this.isTodayGraph && now >= startOfToday && now < endOfTomorrow) {
-      const existingChart = this.charts.find(c => c.unit_ID === unit_ID);
-      if (existingChart) {
-        const updatedData = [
-          ...existingChart.lineChart.dataTable.slice(1),
-          ...liveData
-        ];
-
-        existingChart.lineChart.dataTable = [existingChart.lineChart.dataTable[0], ...updatedData];
-
-        if (existingChart.lineChart.component) {
-          existingChart.lineChart.component.draw();
-        }
-      }
-    }
-  }
-
-  
-  setupWebSocketConnections() {
-    this.http
-      .get<{ message: string; unitCount: number; unitIDs: number[] }>(
-        `${this.apiUrl}/external/getUnitCount`
-      )
-      .subscribe(
-        (data) => {
-          const unitIDs = data.unitIDs;
-          // const unit_ID = data.unitIDs;
-
-    unitIDs.forEach(unit_ID => {
-      this.liveDataSubscriptions[unit_ID] = new Subject<any>();
-
-      this.dataService.getLiveData(unit_ID).subscribe((liveData: any[]) => {
-        const processedLiveData = liveData.map((point: any) => [
-          new Date(point[0]),
-          Number(point[1]),
-          Number(point[2])
-        ]);
-        this.updateChartWithLiveData(processedLiveData, unit_ID);
-      }, (error: any) => {
-        console.error(`Error fetching live data for unit ${unit_ID}:`, error);
-      });
+        scales: {
+          x: { title: { display: true, text: 'Time' } },
+          y: { title: { display: true, text: `${label} (${unit})` } },
+        },
+      },
     });
   }
-)
+
+  private updateCharts(boardID: number, response: any): void {
+    // console.log(`Updating charts for Board ${boardID}:`, response);
+  
+    // Ensure the data property exists
+    if (!response || !response.data) {
+      console.warn(`No valid data property received for Board ${boardID}:`, response);
+      return;
+    }
+  
+    const data = response.data; // Access the actual data object
+    console.log(`Data object for Board ${boardID}:`, data);
+  
+    const timestamp = new Date(data.timestamp || Date.now()).toLocaleTimeString();
+  
+    // Update Temperature Chart
+    if (this.temperatureChart && data.t !== undefined) {
+      // console.log(`Updating Temperature Chart: Board ${boardID}, Value: ${data.t}`);
+      this.addDataToChart(this.temperatureChart, boardID, timestamp, data.t);
+    }
+  
+    // Update Humidity Chart
+    if (this.humidityChart && data.h !== undefined) {
+      // console.log(`Updating Humidity Chart: Board ${boardID}, Value: ${data.h}`);
+      this.addDataToChart(this.humidityChart, boardID, timestamp, data.h);
+    }
+  
+    // Update Power Chart
+    if (this.powerChart && data.eb !== undefined) {
+      // console.log(`Updating Power Chart: Board ${boardID}, Value: ${data.eb}`);
+      this.addDataToChart(this.powerChart, boardID, timestamp, data.eb);
+    }
+  
+    // Update Water Level Chart
+    if (this.waterLevelChart && data.w !== undefined) {
+      // console.log(`Updating Water Level Chart: Board ${boardID}, Value: ${data.w}`);
+      this.addDataToChart(this.waterLevelChart, boardID, timestamp, data.w);
+    }
+  }
+  
+
+  private addDataToChart(
+    chart: Chart,
+    boardID: number,
+    timestamp: string,
+    value: number
+): void {
+    if (!chart?.data?.datasets) {
+        console.error('Invalid chart structure');
+        return;
+    }
+
+    const numericalValue = Number(value);
+    if (isNaN(numericalValue)) {
+        console.error(`Invalid value for Board ${boardID}: ${value}`);
+        return;
+    }
+
+    let dataset = chart.data.datasets.find(
+        (ds) => ds.label === `Board ${boardID}`
+    ) as ChartDataset | undefined;
+
+    if (!dataset) {
+        dataset = {
+            label: `Board ${boardID}`,
+            data: [],
+            borderColor: this.getRandomColor(),
+            fill: false,
+        };
+        chart.data.datasets.push(dataset);
+    }
+
+    if (!Array.isArray(dataset.data)) {
+        dataset.data = [];
+    }
+
+    dataset.data.push(numericalValue);
+
+    if (!Array.isArray(chart.data.labels)) {
+        chart.data.labels = [];
+    }
+
+    if (!chart.data.labels.includes(timestamp)) {
+        chart.data.labels.push(timestamp);
+    }
+
+    // Limit data points
+    if (dataset.data.length > 50) {
+        dataset.data.shift();
+    }
+    if (chart.data.labels.length > 50) {
+        chart.data.labels.shift();
+    }
+
+    chart.update();
+} 
+
+  private getRandomColor(): string {
+    return `hsl(${Math.random() * 360}, 70%, 50%)`;
   }
 
   isSidebarOpen = false;
@@ -209,54 +248,4 @@ export class GraphComponent {
     console.log('Sidebar toggled');
     this.isSidebarOpen = !this.isSidebarOpen;
   }
-
-  openDownloadPopup(unit_ID: number) {
-    this.selectedUnitID = unit_ID;
-    this.isDownloadPopupOpen = true;
-  }
-
-  closeDownloadPopup() {
-    this.isDownloadPopupOpen = false;
-    this.selectedUnitID = null;
-  }
-
-  onPrintClick(unit_ID: number, format: 'excel' | 'pdf') {
-    const selectedDate = this.selectedDates[unit_ID];
-    if (!selectedDate) {
-      console.error('No date selected for this unit.');
-      return;
-    }
-  
-    const startTime = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), 14, 0);
-    const endTime = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() + 1, 13, 59, 59);
-  
-    const formattedStartTime = startTime.toISOString().replace(/\.\d{3}Z$/, 'Z');
-    const formattedEndTime = endTime.toISOString().replace(/\.\d{3}Z$/, 'Z');
-  
-    const url = `http://192.168.0.84:9001/download/${format}/${unit_ID}?start_time=${formattedStartTime}&end_time=${formattedEndTime}`;
-  
-    this.downloadFile(url, format);
-  }
-  
-  downloadFile(url: string, format: 'excel' | 'pdf') {
-    const mimeType = format === 'excel' ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : 'application/pdf';
-    const fileName = format === 'excel' ? 'report.xlsx' : 'report.pdf';
-  
-    this.http.get(url, { responseType: 'blob' }).subscribe(
-      (response: Blob) => {
-        const blob = new Blob([response], { type: mimeType });
-        const downloadUrl = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = downloadUrl;
-        a.download = fileName;
-        a.click();
-        window.URL.revokeObjectURL(downloadUrl);
-      },
-      (error: any) => {
-        console.error('Error downloading the file:', error);
-      }
-    );
-  }
-  
-  
 }

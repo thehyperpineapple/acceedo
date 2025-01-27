@@ -64,46 +64,29 @@
 
 <section class="main">
   <section class="main2">
-    <div class="mainda">
-      <div *ngIf="charts.length > 0" class="chart-container">
-        <div *ngFor="let chart of charts" class="chart-box">
-          <div class="Line">
-            <div class="col">Unit ID: {{ chart.unit_ID }}</div>
-            <mat-icon class="dow" (click)="openDownloadPopup(chart.unit_ID)">print</mat-icon>
-            <label for="dateInput{{ chart.unit_ID }}"></label>
-            <input class="col hh" 
-              id="dateInput{{ chart.unit_ID }}"
-              type="date"
-              (change)="onDateChange($event, chart.unit_ID)"
-              [value]="selectedDates[chart.unit_ID] | date: 'yyyy-MM-dd'"
-            />
-          </div>
-          <hr class="chart-separator">
-          <div class="Line">
-            <div class="col">
-              Temperature: 
-              <span style="color: #d95f02;" class="col">
-                {{ chart.lineChart.dataTable[chart.lineChart.dataTable.length - 1][2] }} °C
-              </span>
-            </div>
-            <div class="col">
-              Humidity: 
-              <span style="color: #1b9e77;" class="col">
-                {{ chart.lineChart.dataTable[chart.lineChart.dataTable.length - 1][1] }} %
-              </span>
-            </div>
-            <div class="col">Live <span class="live-indicator"></span></div>
-          </div>
-          <hr class="chart-separator">
-          <google-chart [data]="chart.lineChart"></google-chart>
-        </div>
+    <div class="chart-container">
+      <div class="chart-box">
+        <h3>Temperature</h3>
+        <canvas id="temperatureCanvas"></canvas>
       </div>
-    </div>
+      <div class="chart-box">
+        <h3>Humidity</h3>
+        <canvas id="humidityCanvas"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Power</h3>
+        <canvas id="powerCanvas"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Water Level</h3>
+        <canvas id="waterLevelCanvas"></canvas>
+      </div>
+    </div>    
   </section>
 </section>
 
 <!-- Download Popup -->
-<div *ngIf="isDownloadPopupOpen" class="download-popup">
+<!-- <div *ngIf="isDownloadPopupOpen" class="download-popup">
   <div class="popup-content">
     <h3>Download Report</h3>
     <p>Select the format to download:</p>
@@ -111,6 +94,6 @@
     <button (click)="selectedUnitID !== null ? onPrintClick(selectedUnitID, 'pdf') : null">Download as PDF</button>
     <button (click)="closeDownloadPopup()">Cancel</button>
   </div>
-</div>
+</div> -->
 
 
