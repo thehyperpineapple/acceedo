@@ -15,18 +15,19 @@ const PORT = process.env.PORT || 3000;
 // Create an HTTP server
 const server = http.createServer(app);
 
-// Attach WebSocket handler to the HTTP server
-externalServiceController.websocketHandler(server);
-
 // Connect to the database and start the server
 (async () => {
     try {
         await connectDB();
         logger.info('Database connected successfully');
 
+        // Initialize WebSocket servers
+        await externalServiceController.websocketHandler();
+        logger.info('WebSocket servers initialized for all boards');
+
+        // Start the HTTP server
         server.listen(PORT, () => {
             logger.info(`Server is running on port ${PORT}`);
-            // log the link 
             console.log(`http://localhost:${PORT}`);
         });
     } catch (error) {
