@@ -6,6 +6,6 @@ Consists of the following:
   - Frontend for Data Visualization
 
 ## To Do
-- [ ] Dashboard with livedata
+- [x] Dashboard with livedata
 - [ ] Time selection in report
 - [x] Configure settings schema to create based on available boards
