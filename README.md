@@ -9,3 +9,5 @@ Consists of the following:
 - [x] Dashboard with livedata
 - [ ] Time selection in report
 - [x] Configure settings schema to create based on available boards
+- [ ] Time configuration in Report
+- [ ] Fetch data until the current time when report is generated
