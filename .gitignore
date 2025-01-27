@@ -47,3 +47,4 @@ Thumbs.db
 # Environments
 *.env
 **environment/
+env/
