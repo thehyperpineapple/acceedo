@@ -11,6 +11,7 @@ interface ChartDataset {
   borderColor: string;
   fill: boolean;
 }
+
 @Component({
   selector: 'app-graph',
   templateUrl: './graph.component.html',
@@ -20,14 +21,14 @@ export class GraphComponent implements OnInit, OnDestroy {
   isBrowser: boolean = false;
   baseUrl = environment.apiUrl;
   wsUrl = environment.wsUrl;
-
+  
   public boards: number[] = [];
   private webSocketConnections: { [key: number]: WebSocket } = {};
   public temperatureChart: Chart | null = null;
   public humidityChart: Chart | null = null;
   public powerChart: Chart | null = null;
   public waterLevelChart: Chart | null = null;
-  public port: number = 8000;
+  public port: number = 8000; // Base port for WebSocket HTTP server
 
   constructor(
     private http: HttpClient,
@@ -67,14 +68,14 @@ export class GraphComponent implements OnInit, OnDestroy {
   }
 
   private setupWebSocketConnections(): void {
+    // For each board, create a WebSocket connection using the new endpoint format:
+    // ws://<wsUrl>:<port>/websocket/<boardID>
     this.boards.forEach((boardID) => {
-      const ws = new WebSocket(`${this.wsUrl}:${this.port + boardID}`);
+      const ws = new WebSocket(`${this.wsUrl}:${this.port}/websocket/${boardID}`);
       this.webSocketConnections[boardID] = ws;
 
       ws.onmessage = (event) => {
-        // console.log(`Raw WebSocket message from Board ${boardID}:`, event.data);
         const data = JSON.parse(event.data);
-        // console.log(`Data received from Board ${boardID}:`, data);
         this.updateCharts(boardID, data);
       };
 
@@ -143,100 +144,94 @@ export class GraphComponent implements OnInit, OnDestroy {
   }
 
   private updateCharts(boardID: number, response: any): void {
-    // console.log(`Updating charts for Board ${boardID}:`, response);
-  
     // Ensure the data property exists
     if (!response || !response.data) {
       console.warn(`No valid data property received for Board ${boardID}:`, response);
       return;
     }
   
-    const data = response.data; // Access the actual data object
+    const data = response.data;
     console.log(`Data object for Board ${boardID}:`, data);
   
+    // Use only time from the timestamp
     const timestamp = new Date(data.timestamp || Date.now()).toLocaleTimeString();
   
     // Update Temperature Chart
     if (this.temperatureChart && data.t !== undefined) {
-      // console.log(`Updating Temperature Chart: Board ${boardID}, Value: ${data.t}`);
       this.addDataToChart(this.temperatureChart, boardID, timestamp, data.t);
     }
   
     // Update Humidity Chart
     if (this.humidityChart && data.h !== undefined) {
-      // console.log(`Updating Humidity Chart: Board ${boardID}, Value: ${data.h}`);
       this.addDataToChart(this.humidityChart, boardID, timestamp, data.h);
     }
   
     // Update Power Chart
     if (this.powerChart && data.eb !== undefined) {
-      // console.log(`Updating Power Chart: Board ${boardID}, Value: ${data.eb}`);
       this.addDataToChart(this.powerChart, boardID, timestamp, data.eb);
     }
   
     // Update Water Level Chart
     if (this.waterLevelChart && data.w !== undefined) {
-      // console.log(`Updating Water Level Chart: Board ${boardID}, Value: ${data.w}`);
       this.addDataToChart(this.waterLevelChart, boardID, timestamp, data.w);
     }
   }
-  
 
   private addDataToChart(
     chart: Chart,
     boardID: number,
     timestamp: string,
     value: number
-): void {
+  ): void {
     if (!chart?.data?.datasets) {
-        console.error('Invalid chart structure');
-        return;
+      console.error('Invalid chart structure');
+      return;
     }
 
     const numericalValue = Number(value);
     if (isNaN(numericalValue)) {
-        console.error(`Invalid value for Board ${boardID}: ${value}`);
-        return;
+      console.error(`Invalid value for Board ${boardID}: ${value}`);
+      return;
     }
 
     let dataset = chart.data.datasets.find(
-        (ds) => ds.label === `Board ${boardID}`
+      (ds) => ds.label === `Board ${boardID}`
     ) as ChartDataset | undefined;
 
     if (!dataset) {
-        dataset = {
-            label: `Board ${boardID}`,
-            data: [],
-            borderColor: this.getRandomColor(),
-            fill: false,
-        };
-        chart.data.datasets.push(dataset);
+      dataset = {
+        label: `Board ${boardID}`,
+        data: [],
+        borderColor: this.getRandomColor(),
+        fill: false,
+      };
+      chart.data.datasets.push(dataset);
     }
 
     if (!Array.isArray(dataset.data)) {
-        dataset.data = [];
+      dataset.data = [];
     }
 
     dataset.data.push(numericalValue);
 
     if (!Array.isArray(chart.data.labels)) {
-        chart.data.labels = [];
+      chart.data.labels = [];
     }
 
     if (!chart.data.labels.includes(timestamp)) {
-        chart.data.labels.push(timestamp);
+      chart.data.labels.push(timestamp);
     }
 
     // Limit data points
-    if (dataset.data.length > 50) {
-        dataset.data.shift();
+    if (dataset.data.length > 10) {
+      dataset.data.shift();
     }
-    if (chart.data.labels.length > 50) {
-        chart.data.labels.shift();
+    if (chart.data.labels.length > 10) {
+      chart.data.labels.shift();
     }
 
     chart.update();
-} 
+  } 
 
   private getRandomColor(): string {
     return `hsl(${Math.random() * 360}, 70%, 50%)`;

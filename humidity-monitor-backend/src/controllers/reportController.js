@@ -19,11 +19,25 @@ const ReportController = {
             const collection = mongoose.connection.collection(collectionName);
 
             const query = {};
-            if (start_date || end_date) {
-                query.timestamp = {};
-                if (start_date) query.timestamp.$gte = new Date(start_date);
-                if (end_date) query.timestamp.$lte = new Date(end_date);
+            if (start_date && end_date) {
+                const start = new Date(start_date);
+                const end = new Date(end_date);
+                // If both dates represent the same calendar day, adjust to cover the entire day.
+                if (start.toDateString() === end.toDateString()) {
+                    start.setHours(0, 0, 0, 0);
+                    end.setHours(23, 59, 59, 999);
+                }
+                query.timestamp = { $gte: start, $lte: end };
+            } else {
+                if (start_date) {
+                    query.timestamp = { $gte: new Date(start_date) };
+                }
+                if (end_date) {
+                    query.timestamp = Object.assign(query.timestamp || {}, { $lte: new Date(end_date) });
+                }
             }
+            
+            console.log('Generated Query:', query);
 
             console.log('Generated Query:', query);
 

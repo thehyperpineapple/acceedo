@@ -22,7 +22,7 @@ const server = http.createServer(app);
         logger.info('Database connected successfully');
 
         // Initialize WebSocket servers
-        await externalServiceController.websocketHandler();
+        await externalServiceController.initializeWebSocketEndpoints();
         logger.info('WebSocket servers initialized for all boards');
 
         // Start the HTTP server

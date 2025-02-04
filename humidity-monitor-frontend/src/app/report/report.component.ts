@@ -104,7 +104,8 @@ export class ReportComponent implements OnInit, AfterViewInit {
         next: (response) => {
           const data = response.data.map((entry: DataEntry) => ({
             ...entry,
-            time: new Date(entry.timestamp).toLocaleString()
+            // time: new Date(entry.timestamp).toLocaleString()
+            time: new Date(entry.timestamp).toLocaleTimeString()
           }));
           this.dataSource.data = data;
           console.log(data);
